@@ -1,0 +1,397 @@
+@import 'tailwindcss';
+@import '../../vendor/livewire/flux/dist/flux.css';
+
+@source '../views';
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../vendor/livewire/flux-pro/stubs/**/*.blade.php';
+@source '../../vendor/livewire/flux/stubs/**/*.blade.php';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --color-zinc-50: #fafafa;
+    --color-zinc-100: #f5f5f5;
+    --color-zinc-200: #e5e5e5;
+    --color-zinc-300: #d4d4d4;
+    --color-zinc-400: #a3a3a3;
+    --color-zinc-500: #737373;
+    --color-zinc-600: #525252;
+    --color-zinc-700: #404040;
+    --color-zinc-800: #262626;
+    --color-zinc-900: #171717;
+    --color-zinc-950: #0a0a0a;
+
+    --color-accent: var(--color-neutral-800);
+    --color-accent-content: var(--color-neutral-800);
+    --color-accent-foreground: var(--color-white);
+}
+
+@layer theme {
+    .dark {
+        --color-accent: var(--color-white);
+        --color-accent-content: var(--color-white);
+        --color-accent-foreground: var(--color-neutral-800);
+    }
+}
+
+@layer base {
+
+    *,
+    ::after,
+    ::before,
+    ::backdrop,
+    ::file-selector-button {
+        border-color: var(--color-gray-200, currentColor);
+    }
+}
+
+[data-flux-field]:not(ui-radio, ui-checkbox) {
+    @apply grid gap-2;
+}
+
+[data-flux-label] {
+    @apply  !mb-0 !leading-tight;
+}
+
+input:focus[data-flux-control],
+textarea:focus[data-flux-control],
+select:focus[data-flux-control] {
+    @apply outline-hidden ring-2 ring-accent ring-offset-2 ring-offset-accent-foreground;
+}
+
+/* \[:where(&)\]:size-4 {
+    @apply size-4;
+} */
+
+@layer base {
+    :root {
+        --restaurant-bg: #0f0b09;
+        --restaurant-surface: rgba(23, 16, 13, 0.78);
+        --restaurant-surface-strong: rgba(11, 8, 7, 0.9);
+        --restaurant-border: rgba(255, 255, 255, 0.12);
+        --restaurant-accent: #f59e0b;
+        --restaurant-accent-strong: #f97316;
+        --restaurant-text: #f5f5f4;
+    }
+}
+
+@layer components {
+    .restaurant-body {
+        font-family: 'Outfit', sans-serif;
+        background:
+            radial-gradient(1200px 600px at 10% -10%, rgba(251, 146, 60, 0.2), transparent 55%),
+            radial-gradient(1000px 500px at 90% 10%, rgba(217, 119, 6, 0.12), transparent 60%),
+            linear-gradient(145deg, #0f0b09, #17110d 55%, #090706 100%);
+        color: var(--restaurant-text);
+        min-height: 100vh;
+        overflow-x: hidden;
+        position: relative;
+    }
+
+    .restaurant-body::before {
+        content: '';
+        position: fixed;
+        inset: -12% -10% auto -10%;
+        height: 72vh;
+        background:
+            radial-gradient(closest-side, rgba(245, 158, 11, 0.35), transparent 72%),
+            radial-gradient(closest-side, rgba(249, 115, 22, 0.2), transparent 68%);
+        filter: blur(80px);
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .restaurant-body::after {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.3));
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .restaurant-display {
+        font-family: 'Cormorant Garamond', serif;
+        letter-spacing: 0.01em;
+    }
+
+    .restaurant-grid-overlay {
+        position: fixed;
+        inset: 0;
+        background-image:
+            linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+        background-size: 80px 80px;
+        mask-image: radial-gradient(circle at 50% 25%, black 35%, transparent 80%);
+        opacity: 0.13;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .restaurant-noise {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0.11;
+        background-image: radial-gradient(rgba(255, 255, 255, 0.08) 0.55px, transparent 0.55px);
+        background-size: 3px 3px;
+        z-index: 0;
+    }
+
+    .restaurant-blur {
+        position: fixed;
+        border-radius: 9999px;
+        filter: blur(60px);
+        opacity: 0.2;
+        pointer-events: none;
+        z-index: 0;
+        animation: restaurant-float 11s ease-in-out infinite;
+    }
+
+    .restaurant-blur-left {
+        width: 21rem;
+        height: 21rem;
+        top: 16%;
+        left: -6rem;
+        background: rgba(251, 146, 60, 0.38);
+    }
+
+    .restaurant-blur-right {
+        width: 19rem;
+        height: 19rem;
+        right: -5rem;
+        bottom: 10%;
+        background: rgba(245, 158, 11, 0.32);
+        animation-delay: 2s;
+    }
+
+    .restaurant-panel {
+        border: 1px solid transparent;
+        background:
+            linear-gradient(165deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0) 45%) padding-box,
+            linear-gradient(165deg, var(--restaurant-surface), var(--restaurant-surface-strong)) padding-box,
+            linear-gradient(145deg, rgba(245, 158, 11, 0.4), rgba(255, 255, 255, 0.18), rgba(251, 146, 60, 0.24)) border-box;
+        border-radius: 1.25rem;
+        backdrop-filter: blur(6px);
+        box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.1),
+            0 30px 50px rgba(0, 0, 0, 0.33),
+            0 0 0 1px rgba(0, 0, 0, 0.22);
+        transition: transform 240ms ease, box-shadow 240ms ease, border-color 240ms ease;
+    }
+
+    .restaurant-panel:hover {
+        transform: translateY(-2px);
+        box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.12),
+            0 35px 58px rgba(0, 0, 0, 0.42),
+            0 0 0 1px rgba(245, 158, 11, 0.13);
+    }
+
+    .restaurant-eyebrow {
+        color: #fcd8a8;
+        font-size: 0.72rem;
+        letter-spacing: 0.32em;
+        text-transform: uppercase;
+        font-weight: 500;
+    }
+
+    .restaurant-button {
+        align-items: center;
+        border-radius: 9999px;
+        display: inline-flex;
+        font-size: 0.88rem;
+        font-weight: 600;
+        gap: 0.45rem;
+        justify-content: center;
+        letter-spacing: 0.04em;
+        padding: 0.68rem 1.18rem;
+        text-transform: uppercase;
+        transition: all 180ms ease;
+    }
+
+    .restaurant-button-primary {
+        background: linear-gradient(135deg, var(--restaurant-accent), var(--restaurant-accent-strong));
+        color: #fff8eb;
+        box-shadow: 0 10px 24px rgba(234, 88, 12, 0.35);
+    }
+
+    .restaurant-button-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 16px 30px rgba(234, 88, 12, 0.42);
+        filter: brightness(1.06);
+    }
+
+    .restaurant-button-ghost {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        color: #fef3c7;
+    }
+
+    .restaurant-button-ghost:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.28);
+    }
+
+    .restaurant-nav-link {
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 9999px;
+        color: rgb(214 211 209);
+        font-size: 0.8rem;
+        letter-spacing: 0.04em;
+        padding: 0.4rem 0.75rem;
+        text-transform: uppercase;
+        background: rgba(255, 255, 255, 0.01);
+        backdrop-filter: blur(4px);
+        transition: all 170ms ease;
+    }
+
+    .restaurant-nav-link:hover {
+        border-color: rgba(255, 255, 255, 0.16);
+        color: #fff7ed;
+    }
+
+    .restaurant-nav-link-active {
+        background: rgba(251, 146, 60, 0.16);
+        border-color: rgba(251, 146, 60, 0.45);
+        color: #fde68a;
+        box-shadow: inset 0 0 0 1px rgba(245, 158, 11, 0.14);
+    }
+
+    .restaurant-list-row {
+        align-items: center;
+        border-bottom: 1px dashed rgba(255, 255, 255, 0.16);
+        color: rgb(214 211 209);
+        display: flex;
+        font-size: 0.9rem;
+        justify-content: space-between;
+        gap: 1rem;
+        padding-bottom: 0.8rem;
+    }
+
+    .restaurant-list-row:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    .restaurant-field {
+        display: grid;
+        gap: 0.45rem;
+    }
+
+    .restaurant-field span {
+        color: rgb(214 211 209);
+        font-size: 0.78rem;
+        letter-spacing: 0.11em;
+        text-transform: uppercase;
+    }
+
+    .restaurant-input {
+        background: rgba(0, 0, 0, 0.28);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 0.9rem;
+        color: #f5f5f4;
+        font-size: 0.94rem;
+        outline: none;
+        padding: 0.72rem 0.88rem;
+        transition: border-color 170ms ease, box-shadow 170ms ease, background-color 170ms ease;
+    }
+
+    .restaurant-input:focus {
+        background: rgba(0, 0, 0, 0.42);
+        border-color: rgba(251, 146, 60, 0.75);
+        box-shadow: 0 0 0 3px rgba(251, 146, 60, 0.2);
+    }
+
+    .restaurant-topbar {
+        position: sticky;
+    }
+
+    .restaurant-topbar::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -1px;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.65), transparent);
+        pointer-events: none;
+    }
+
+    .restaurant-main {
+        animation: restaurant-reveal 0.65s ease both;
+    }
+
+    .restaurant-footer {
+        position: relative;
+    }
+
+    .restaurant-footer::before {
+        content: '';
+        position: absolute;
+        top: -1px;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.5), transparent);
+    }
+
+    .restaurant-photo-tile {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 1rem;
+        overflow: hidden;
+        position: relative;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.09), 0 18px 35px rgba(0, 0, 0, 0.32);
+    }
+
+    .restaurant-photo-tile::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.58), rgba(0, 0, 0, 0.1) 52%, rgba(0, 0, 0, 0.4));
+        pointer-events: none;
+    }
+
+    .restaurant-photo-tile:hover .restaurant-photo-art {
+        transform: scale(1.08);
+    }
+
+    .restaurant-photo-art {
+        position: absolute;
+        inset: 0;
+        transition: transform 320ms ease;
+    }
+
+    .restaurant-photo-content {
+        position: relative;
+        z-index: 10;
+        min-height: 12rem;
+        display: flex;
+        align-items: end;
+        padding: 1.5rem;
+    }
+}
+
+@keyframes restaurant-float {
+    0%,
+    100% {
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+
+    50% {
+        transform: translate3d(0, -16px, 0) scale(1.02);
+    }
+}
+
+@keyframes restaurant-reveal {
+    from {
+        opacity: 0;
+        transform: translateY(14px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
